@@ -12,16 +12,15 @@ def take_backup(src_folder, dest_folder, auto=False):
             shutil.make_archive(dest_file, 'zip', src_folder)
         else:
             shutil.make_archive(dest_file, 'zip', src_folder)
-            print(f"{Fore.GREEN}{time.strftime('%H:%M:%S')} [info]{Fore.RESET} Backup Alındı! Dosya Yolu: {dest_file}")
+            print(f"{Fore.GREEN}{time.strftime('%H:%M:%S')} [info]{Fore.RESET} Backup Received! File Path: {dest_file}")
     except Exception as e:
-        print(f"{Fore.RED}{time.strftime('%H:%M:%S')} [Error]{Fore.RESET} Bir hata oluştu: {e}")
-
+        print(f"{Fore.RED}{time.strftime('%H:%M:%S')} [Error]{Fore.RESET} An error occurred: {e}")
 def print_help():
-    print("Kullanım: backup.py [OPTIONS]")
-    print("Seçenekler:")
-    print("--backup now        : Anlık Yedek Alır.")
-    print("--backup (sayı)     : Belirli saat aralıklarıyla otomatik yedek alır.")
-    print("                      Örnek: --backup 2 (Burada 2 Saat aralıkla Yedek Alıyor.)")
+    print("Use: backup.py [OPTIONS]")
+    print("Options:")
+    print("--backup now : Takes Instant Backup.")
+    print("--backup (number) : Takes automatic backups at specific time intervals.")
+    print(" Example: --backup 2 (Here it takes backups at 2 hour intervals.)")
 
 if __name__ == "__main__":
     init()  
@@ -29,7 +28,7 @@ if __name__ == "__main__":
     dest_folder = "C:\\xampp\\Backup"  
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--backup", nargs="?", const="now", help="Belirli saat aralıklarıyla otomatik Yedek Alır. Örnek: --backup 2 (2 saat aralıklarla yedek alınır.)")
+    parser.add_argument("--backup", nargs="?", const="now", help="Automatic Backup at certain time intervals. Example: --backup 2 (Takes backups at 2 hour intervals.)")
     args = parser.parse_args()
 
     if not args.backup or args.backup in ['-h', '--help']:
@@ -40,13 +39,14 @@ if __name__ == "__main__":
         else:
             try:
                 interval_hours = int(args.backup)
-                print(f"{Fore.GREEN}{time.strftime('%H:%M:%S')} [info]{Fore.RESET} {interval_hours} Saat Aralıkla Düzenli Olarak {dest_folder} Yolundaki Klasöre Backup Alınacak.")
+                
                 while True:
                     take_backup(src_folder, dest_folder, True)
+                    print(f"{Fore.GREEN}{time.strftime('%H:%M:%S')} [info]{Fore.RESET} {interval_hours} Hours Periodically Backup to the Folder at Path {dest_folder}.")
                     time.sleep(interval_hours * 3600)
             except ValueError:
-                 print(f"{Fore.RED}{time.strftime('%H:%M:%S')} [Error]{Fore.RESET} Lütfen Bir Sayı Girin.")
+                 print(f"{Fore.RED}{time.strftime('%H:%M:%S')} [Error]{Fore.RESET} Please enter a number.")
             except KeyboardInterrupt:
-                 print(f"{Fore.RED}{time.strftime('%H:%M:%S')} [Error]{Fore.RESET} CTRL+C Yapıldı!\nİşlem İptal Ediliyor...")
+                 print(f"{Fore.RED}{time.strftime('%H:%M:%S')} [Error]{Fore.RESET} CTRL+C Executed!\nCanceling Operation...")
                  time.sleep(3);
-                 exit(f"{Fore.RED}{time.strftime('%H:%M:%S')} Çıkış yapılıyor...")
+                 exit(f"{Fore.RED}{time.strftime('%H:%M:%S')} Exit is in progress...")
